@@ -86,7 +86,7 @@ def test(model, loader, opt, is_test=False):
             pdb.set_trace()
     
     results_folder = "results"
-    os.makedirs(results_folder)
+    os.makedirs(results_folder, exist_ok=True)
     print(img_x.shape, "pred_imgs")
     print(img_y.shape, "pred_imgs")
     print(pred_imgs.shape, "pred_imgs")
