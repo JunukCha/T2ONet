@@ -91,6 +91,7 @@ class RNNEncoder(nn.Module):
         embedded = self.embedding(input_labels)  # (n, seq_len, word_embedding_size)
         embedded = self.input_dropout(embedded) # (n, seq_len, word_embedding_size)
         if self.variable_lengths:
+            sorted_input_lengths = sorted_input_lengths.cuda()
             embedded = nn.utils.rnn.pack_padded_sequence(embedded, sorted_input_lengths, batch_first=True)
         # forward rnn
         output, hidden = self.rnn(embedded)

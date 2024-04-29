@@ -199,7 +199,6 @@ class Actor(nn.Module):
         :return input_lengths: (bs,)
         """
         batch_size = x.shape[0]
-        print(self.lang_encoder.device, "self.lang_encoder")
         encoder_outputs, encoder_hidden, _ = self.lang_encoder(x) # (n_rnnlayer, 1, hidden_size), (bs, encoder_valid_len, hidden)
         decoder_hidden = self.decoder._init_state(encoder_hidden)
         decoder_hiddens = [tuple(map(lambda x: x.detach(), decoder_hidden))]
