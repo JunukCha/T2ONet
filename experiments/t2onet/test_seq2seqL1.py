@@ -83,8 +83,6 @@ def test(model, loader, opt, is_test=False):
             pred_params = torch.cat([pred_params[i][:, :1] for i in range(len(pred_params))]).unsqueeze(0)
             pdb.set_trace()
     if opt.visualize:
-        print(img_x.cpu().numpy())
-        print(img_y.unsqueeze(0).cpu().numpy())
         print(pred_imgs.cpu().numpy())
         print(pred_params.cpu().numpy())
         print(pred_ops.cpu().numpy())
