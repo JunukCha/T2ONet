@@ -12,6 +12,8 @@ from datasets.FiveKdataset import FiveK
 from models.actor import Actor
 from utils.eval import ImageEvaluator
 from utils.text_utils import load_vocab, txt2idx
+from torchvision.utils import save_image
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -82,11 +84,22 @@ def test(model, loader, opt, is_test=False):
         if opt.visualize and itr % opt.visualize_every == 0:
             pred_params = torch.cat([pred_params[i][:, :1] for i in range(len(pred_params))]).unsqueeze(0)
             pdb.set_trace()
-    if opt.visualize:
-            update_web(webpage, req, None, img_x.cpu().numpy(), img_y.unsqueeze(0).cpu().numpy(), pred_imgs.cpu().numpy(), None, pred_params.cpu().numpy(), itr, pred_ops.cpu().numpy(), loader.dataset.id2op_vocab, img_dir, supervise=0)
+    
+    results_folder = "results"
+    os.makedirs(results_folder)
+    print(img_x.shape, "pred_imgs")
+    print(img_y.shape, "pred_imgs")
+    print(pred_imgs.shape, "pred_imgs")
+    save_image(img_x, os.path.join(results_folder, "input.jpg"))
+    save_image(img_y, os.path.join(results_folder, "target.jpg"))
+    save_image(pred_imgs, os.path.join(results_folder, "pred.jpg"))
+    
+    
+    # if opt.visualize:
+    #         update_web(webpage, req, None, img_x.cpu().numpy(), img_y.unsqueeze(0).cpu().numpy(), pred_imgs.cpu().numpy(), None, pred_params.cpu().numpy(), itr, pred_ops.cpu().numpy(), loader.dataset.id2op_vocab, img_dir, supervise=0)
 
-    if opt.visualize:
-        webpage.save()
+    # if opt.visualize:
+    #     webpage.save()
 
     if is_test:
         Eval.eval()
@@ -162,4 +175,4 @@ if __name__ == '__main__':
 
     # test
     test(model, loader, opt, is_test=True)
-    test_variance(model, loader, opt)
+    # test_variance(model, loader, opt)
