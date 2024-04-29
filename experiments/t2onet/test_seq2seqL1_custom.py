@@ -92,7 +92,8 @@ def test(model, loader, opt, is_test=False):
     print(pred_imgs.shape, "pred_imgs")
     save_image(img_x[0], os.path.join(results_folder, "input.jpg"))
     save_image(img_y[0], os.path.join(results_folder, "target.jpg"))
-    for pred_idx, pred_img in enumerate(pred_img[0]):
+    print(len(pred_imgs[0]))
+    for pred_idx, pred_img in enumerate(pred_imgs[0]):
         save_image(pred_img, os.path.join(results_folder, f"pred{pred_idx}.jpg"))
     
     
