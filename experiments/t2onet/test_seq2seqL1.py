@@ -55,8 +55,10 @@ def test(model, loader, opt, is_test=False):
         # ship to device
         x, img_x, img_y = list(map(lambda r: r.to(device), [x, img_x, img_y]))
         with torch.no_grad():
-                state, pred_imgs, pred_ops, pred_params = model.episode_forward(x, img_x, mask_dict=None,
-                                                                                         reinforce_sample=False)
+            print(x.device)
+            print(img_x.device)
+            state, pred_imgs, pred_ops, pred_params = model.episode_forward(x, img_x, mask_dict=None,
+                                                                                        reinforce_sample=False)
         # for loop to get column index with end token
         end_fake_imgs = []
         bs, max_len, cn, h, w = pred_imgs.shape
