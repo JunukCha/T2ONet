@@ -163,7 +163,7 @@ if __name__ == '__main__':
     # data loader
     img_dir = 'data/FiveK/images'
     anno_dir = 'data/FiveK/annotations'
-    test_dataset = CustomDataset("../../code/data/s3_json/test/test_s3_data_small2.json", "junukc", "jaeyoon-west2")
+    test_dataset = CustomDataset()
     loader = DataLoader(test_dataset, batch_size=opt.batch_size, shuffle=False, num_workers=opt.num_workers)
     # load model
     model = Actor(opt)

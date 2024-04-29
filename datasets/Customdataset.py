@@ -4,9 +4,10 @@ import pdb
 import sys
 import numpy as np
 import torch
+from PIL import Image
+import glob
 from utils.visual_utils import load_train_img, load_infer_img, load_infer_img_short_size_bounded
 from torch.utils.data import Dataset, DataLoader
-from utils.s3_data import S3Data
 
 
 def load_vocab(vocab_dir, session):
@@ -23,7 +24,7 @@ def load_vocab(vocab_dir, session):
 
 
 class CustomDataset(Dataset):
-    def __init__(self, json_path, base_path, bucket):
+    def __init__(self):
         # self.op_max_len = 6
         # self.req_max_len = 15
         # self.session = session
@@ -32,20 +33,25 @@ class CustomDataset(Dataset):
         # self.data = self.load_data(anno_dir)
         # self.train_img_size = train_img_size
         # self.vocab2id, self.id2vocab, self.op_vocab2id, self.id2op_vocab = load_vocab(vocab_dir, self.session)
-        self.s3_data = S3Data(json_path, base_path=base_path, bucket=bucket)
-        
+        self.source_list = glob.glob("../test/images/source/*.jpg")
+        self.target_list = glob.glob("../test/images/target/*.jpg")
+        self.text_list = glob.glob("../test/text/*.txt")
+        self.source_list.sort()
+        self.target_list.sort()
+        self.text_list.sort()
     # def load_data(self, anno_dir):
     #     with open(os.path.join(anno_dir, '{}_sess_{}.json'.format(self.phase, self.session))) as f:
     #         data = json.load(f)
     #     return data
 
     def __len__(self):
-        return 1 # len(self.data)
+        return 1 # len(self.text_list)
 
     def __getitem__(self, i):
-        prompt = self.s3_data.get_text(i)
-        image_0 = self.s3_data.get_image(i, "source")
-        image_1 = self.s3_data.get_image(i, "target")
+        with open(self.text_list[i], "r") as f:
+            prompt = f.read().splitlines()
+        image_0 = Image.open(self.source_list[i])
+        image_1 = Image.open(self.target_list[i])
         image_0 = image_0.resize((600, 600))
         image_1 = image_1.resize((600, 600))
         image_0 = torch.FloatTensor(image_0)/255
