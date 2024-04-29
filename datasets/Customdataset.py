@@ -52,8 +52,8 @@ class CustomDataset(Dataset):
             prompt = f.read().splitlines()
         image_0 = Image.open(self.source_list[i])
         image_1 = Image.open(self.target_list[i])
-        image_0 = image_0.resize((600, 600))
-        image_1 = image_1.resize((600, 600))
+        image_0 = np.array(image_0.resize((600, 600)))
+        image_1 = np.array(image_1.resize((600, 600)))
         image_0 = torch.FloatTensor(image_0)/255
         image_1 = torch.FloatTensor(image_1)/255
         image_0 = image_0.permute(2, 0, 1)
