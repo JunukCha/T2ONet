@@ -48,6 +48,7 @@ class S3Data():
     
     def get_image(self, index, key, return_path=False):
         data = self.data_list[index]
+        print(data[key])
         real_image_path = osp.join(self.base_path, data[key])
         image_path = self.objClient.get_object(Bucket=self.bucket, Key=real_image_path)["Body"]
         if return_path:
