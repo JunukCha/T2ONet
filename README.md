@@ -23,7 +23,7 @@ This is the Pytorch implementation for paper "Learning by Planning: Language-Gui
 - Clone this repo
 
   ```shell
-  git clone https://github.com/jshi31/T2ONet.git --recursive
+  git clone https://github.com/JunukCha/T2ONet.git --recursive
   ```
 
 - Install the submodule `pyutils/edgeconnect` according to its [README](https://github.com/jshi31/edge-connect/tree/1f2658e3b190de47b86b9e25ff39227ed90d5f26).
