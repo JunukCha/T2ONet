@@ -55,8 +55,6 @@ def test(model, loader, opt, is_test=False):
         # ship to device
         x, img_x, img_y = list(map(lambda r: r.to(device), [x, img_x, img_y]))
         with torch.no_grad():
-            print(x.device)
-            print(img_x.device)
             state, pred_imgs, pred_ops, pred_params = model.episode_forward(x, img_x, mask_dict=None,
                                                                                         reinforce_sample=False)
         # for loop to get column index with end token
@@ -85,7 +83,7 @@ def test(model, loader, opt, is_test=False):
             pred_params = torch.cat([pred_params[i][:, :1] for i in range(len(pred_params))]).unsqueeze(0)
             pdb.set_trace()
     if opt.visualize:
-            update_web(webpage, req, None, img_x.cpu().numpy(), img_y.unsqueeze(0).cpu().numpy(), pred_imgs.cpu().numpy(), None, pred_params.cpu().numpy(), itr, pred_ops.cpu().numpy(), loader.dataset.id2op_vocab, img_dir, supervise=0)
+        update_web(webpage, req, None, img_x.cpu().numpy(), img_y.unsqueeze(0).cpu().numpy(), pred_imgs.cpu().numpy(), None, pred_params.cpu().numpy(), itr, pred_ops.cpu().numpy(), loader.dataset.id2op_vocab, img_dir, supervise=0)
 
     if opt.visualize:
         webpage.save()
