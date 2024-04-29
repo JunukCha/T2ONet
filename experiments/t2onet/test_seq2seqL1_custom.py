@@ -71,6 +71,12 @@ def test(model, loader, opt, is_test=False):
             end_fake_imgs.append(pred_imgs[bs_i, col_idx])
         pred_img = torch.stack(end_fake_imgs)
 
+        results_folder = f"results/{i:03d}"
+        os.makedirs(results_folder, exist_ok=True)
+        save_image(img_x[0], os.path.join(results_folder, "input.jpg"))
+        save_image(img_y[0], os.path.join(results_folder, "target.jpg"))
+        save_image(pred_img[0], os.path.join(results_folder, "pred.jpg"))
+        
         # tok = time.time()
         # avg_time = avg_time * (1 - 1/itr) + (tok - tik) / itr
         # init_dist = torch.abs(img_x - img_y).mean().item()
@@ -87,13 +93,6 @@ def test(model, loader, opt, is_test=False):
         # if opt.visualize and itr % opt.visualize_every == 0:
         #     pred_params = torch.cat([pred_params[i][:, :1] for i in range(len(pred_params))]).unsqueeze(0)
         #     pdb.set_trace()
-    
-    results_folder = "results"
-    os.makedirs(results_folder, exist_ok=True)
-    save_image(img_x[0], os.path.join(results_folder, "input.jpg"))
-    save_image(img_y[0], os.path.join(results_folder, "target.jpg"))
-    save_image(pred_img[0], os.path.join(results_folder, "pred.jpg"))
-    
     
     # if opt.visualize:
     #         update_web(webpage, req, None, img_x.cpu().numpy(), img_y.unsqueeze(0).cpu().numpy(), pred_imgs.cpu().numpy(), None, pred_params.cpu().numpy(), itr, pred_ops.cpu().numpy(), loader.dataset.id2op_vocab, img_dir, supervise=0)

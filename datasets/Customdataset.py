@@ -45,7 +45,7 @@ class CustomDataset(Dataset):
     #     return data
 
     def __len__(self):
-        return 1 # len(self.text_list)
+        return 100 # len(self.text_list)
 
     def __getitem__(self, i):
         with open(self.text_list[i], "r") as f:
