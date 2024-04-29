@@ -50,7 +50,6 @@ class CustomDataset(Dataset):
     def __getitem__(self, i):
         with open(self.text_list[i], "r") as f:
             prompt = f.read().splitlines()[0]
-        print(prompt)
         image_0 = Image.open(self.source_list[i])
         image_1 = Image.open(self.target_list[i])
         image_0 = np.array(image_0.resize((600, 600)))

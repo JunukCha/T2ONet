@@ -14,6 +14,7 @@ def parse_sent(desc):
     """
     table = str.maketrans('', '', string.punctuation)
     # tokenize
+    print(desc)
     desc = desc.split()
     # convert to lower case
     desc = [word.lower() for word in desc]
