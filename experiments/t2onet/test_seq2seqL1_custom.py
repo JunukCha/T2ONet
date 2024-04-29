@@ -89,9 +89,11 @@ def test(model, loader, opt, is_test=False):
     os.makedirs(results_folder, exist_ok=True)
     print(img_x.shape, "pred_imgs")
     print(img_y.shape, "pred_imgs")
+    print(pred_img.shape, "pred_img")
     print(pred_imgs.shape, "pred_imgs")
     save_image(img_x[0], os.path.join(results_folder, "input.jpg"))
     save_image(img_y[0], os.path.join(results_folder, "target.jpg"))
+    save_image(pred_img[0], os.path.join(results_folder, "pred.jpg"))
     print(len(pred_imgs[0]))
     for pred_idx, pred_img in enumerate(pred_imgs[0]):
         save_image(pred_img, os.path.join(results_folder, f"pred{pred_idx}.jpg"))
