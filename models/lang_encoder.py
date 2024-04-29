@@ -96,6 +96,7 @@ class RNNEncoder(nn.Module):
             print("sorted_input_lengths", sorted_input_lengths.device)
             print("embedded", embedded.device)
             embedded = nn.utils.rnn.pack_padded_sequence(embedded, sorted_input_lengths, batch_first=True)
+            embedded = embedded.cuda()
         # forward rnn
         output, hidden = self.rnn(embedded)
 
