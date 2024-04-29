@@ -90,9 +90,10 @@ def test(model, loader, opt, is_test=False):
     print(img_x.shape, "pred_imgs")
     print(img_y.shape, "pred_imgs")
     print(pred_imgs.shape, "pred_imgs")
-    save_image(img_x, os.path.join(results_folder, "input.jpg"))
-    save_image(img_y, os.path.join(results_folder, "target.jpg"))
-    save_image(pred_imgs, os.path.join(results_folder, "pred.jpg"))
+    save_image(img_x[0], os.path.join(results_folder, "input.jpg"))
+    save_image(img_y[0], os.path.join(results_folder, "target.jpg"))
+    for pred_idx, pred_img in enumerate(pred_img[0]):
+        save_image(pred_img, os.path.join(results_folder, f"pred{pred_idx}.jpg"))
     
     
     # if opt.visualize:
