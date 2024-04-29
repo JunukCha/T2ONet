@@ -99,8 +99,6 @@ def test(model, loader, opt, is_test=False):
 def test_variance(model, loader, opt):
     model.eval()
     itr = 0
-    # load and preprocessing img and text
-    from core.utils.eval import test_txts
 
     vocab2id, _, _, _ = load_vocab(opt.vocab_dir, opt.dataset, opt.session)
 
