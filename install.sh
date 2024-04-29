@@ -7,3 +7,6 @@ pip install kornia==0.5.0
 pip install scipy
 pip install scikit-image
 pip install torch==2.0.1 torchvision==0.15.2
+pip install pyaml
+pip install h5py
+pip install pyyaml
