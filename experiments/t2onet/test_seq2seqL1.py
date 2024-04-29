@@ -83,9 +83,7 @@ def test(model, loader, opt, is_test=False):
             pred_params = torch.cat([pred_params[i][:, :1] for i in range(len(pred_params))]).unsqueeze(0)
             pdb.set_trace()
     if opt.visualize:
-        print(pred_params.cpu().numpy())
-        print(pred_ops.cpu().numpy())
-        update_web(webpage, req, None, img_x.cpu().numpy(), img_y.unsqueeze(0).cpu().numpy(), pred_imgs.cpu().numpy(), None, pred_params.cpu().numpy(), itr, pred_ops.cpu().numpy(), loader.dataset.id2op_vocab, img_dir, supervise=0)
+        update_web(webpage, req, None, img_x.cpu().numpy(), img_y.unsqueeze(0).cpu().numpy(), pred_imgs.cpu().numpy(), None, pred_params, itr, pred_ops.cpu().numpy(), loader.dataset.id2op_vocab, img_dir, supervise=0)
 
     if opt.visualize:
         webpage.save()
