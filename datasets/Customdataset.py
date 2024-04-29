@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from utils.visual_utils import load_train_img, load_infer_img, load_infer_img_short_size_bounded
 from torch.utils.data import Dataset, DataLoader
+from utils.s3_data import S3Data
 
 
 def load_vocab(vocab_dir, session):
@@ -22,34 +23,37 @@ def load_vocab(vocab_dir, session):
 
 
 class CustomDataset(Dataset):
-    def __init__(self, img_dir, anno_dir, vocab_dir, phase, session, train_img_size=128):
-        self.op_max_len = 6
-        self.req_max_len = 15
-        self.session = session
-        self.phase = phase
-        self.img_dir = img_dir
-        self.data = self.load_data(anno_dir)
-        self.train_img_size = train_img_size
-        self.vocab2id, self.id2vocab, self.op_vocab2id, self.id2op_vocab = load_vocab(vocab_dir, self.session)
-
-    def load_data(self, anno_dir):
-        with open(os.path.join(anno_dir, '{}_sess_{}.json'.format(self.phase, self.session))) as f:
-            data = json.load(f)
-        return data
+    def __init__(self, json_path, base_path, bucket):
+        # self.op_max_len = 6
+        # self.req_max_len = 15
+        # self.session = session
+        # self.phase = phase
+        # self.img_dir = img_dir
+        # self.data = self.load_data(anno_dir)
+        # self.train_img_size = train_img_size
+        # self.vocab2id, self.id2vocab, self.op_vocab2id, self.id2op_vocab = load_vocab(vocab_dir, self.session)
+        self.s3_data = S3Data(json_path, base_path=base_path, bucket=bucket)
+        
+    # def load_data(self, anno_dir):
+    #     with open(os.path.join(anno_dir, '{}_sess_{}.json'.format(self.phase, self.session))) as f:
+    #         data = json.load(f)
+    #     return data
 
     def __len__(self):
-        return len(self.data)
+        return 1 # len(self.data)
 
-    def __getitem__(self, item):
-        dic = self.data[item]
-        req_idx = np.array(dic['request_idx'])
-        req = dic['request']
-        input_path = os.path.join(self.img_dir, dic['input'])
-        output_path = os.path.join(self.img_dir, dic['output'])
-        input_img = load_train_img(input_path, self.train_img_size) if self.phase == 'train' else load_infer_img_short_size_bounded(input_path, 600)
-        output_img = load_train_img(output_path, self.train_img_size) if self.phase == 'train' else load_infer_img_short_size_bounded(output_path, 600)
-        return input_img, output_img, req_idx, req
-
+    def __getitem__(self, i):
+        prompt = self.s3_data.get_text(i)
+        image_0 = self.s3_data.get_image(i, "source")
+        image_1 = self.s3_data.get_image(i, "target")
+        image_0 = image_0.resize((600, 600))
+        image_1 = image_1.resize((600, 600))
+        image_0 = torch.FloatTensor(image_0)/255
+        image_1 = torch.FloatTensor(image_1)/255
+        image_0 = image_0.permute(2, 0, 1)
+        image_1 = image_1.permute(2, 0, 1)
+        return image_0, image_1, prompt
+    
 
 def analyze_traj(seq):
     seq = np.array(seq)
