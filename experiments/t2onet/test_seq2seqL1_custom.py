@@ -91,7 +91,7 @@ def test(model, loader, opt, is_test=False):
     results_folder = "results"
     os.makedirs(results_folder, exist_ok=True)
     save_image(img_x[0], os.path.join(results_folder, "input.jpg"))
-    # save_image(img_y[0], os.path.join(results_folder, "target.jpg"))
+    save_image(img_y[0], os.path.join(results_folder, "target.jpg"))
     save_image(pred_img[0], os.path.join(results_folder, "pred.jpg"))
     
     
@@ -101,8 +101,8 @@ def test(model, loader, opt, is_test=False):
     # if opt.visualize:
     #     webpage.save()
 
-    if is_test:
-        Eval.eval()
+    # if is_test:
+    #     Eval.eval()
 
     print('inference init L1 dist {:.4f}; L1 dist {:.4f}'.format(avg_init_dist, avg_dist))
     return avg_init_dist, avg_dist
