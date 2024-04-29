@@ -38,7 +38,7 @@ class FiveK(Dataset):
         return data
 
     def __len__(self):
-        return len(self.data)
+        return 1 # len(self.data)
 
     def __getitem__(self, item):
         dic = self.data[item]
