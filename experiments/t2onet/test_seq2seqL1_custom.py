@@ -73,9 +73,9 @@ def test(model, loader, opt, is_test=False):
 
         results_folder = f"results/{i:03d}"
         os.makedirs(results_folder, exist_ok=True)
-        save_image(torch.nn.functional.interpolate(img_x[0], 512), os.path.join(results_folder, "input.jpg"))
-        save_image(torch.nn.functional.interpolate(img_y[0], 512), os.path.join(results_folder, "target.jpg"))
-        save_image(torch.nn.functional.interpolate(pred_img[0], 512), os.path.join(results_folder, "pred.jpg"))
+        save_image(torch.nn.functional.interpolate(img_x[0], (3, 512, 512)), os.path.join(results_folder, "input.jpg"))
+        save_image(torch.nn.functional.interpolate(img_y[0], (3, 512, 512)), os.path.join(results_folder, "target.jpg"))
+        save_image(torch.nn.functional.interpolate(pred_img[0], (3, 512, 512)), os.path.join(results_folder, "pred.jpg"))
         
         # tok = time.time()
         # avg_time = avg_time * (1 - 1/itr) + (tok - tik) / itr
