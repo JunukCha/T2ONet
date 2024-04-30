@@ -11,6 +11,7 @@ from options.seq2seqGAN_train_options import TrainOptions
 from datasets.FiveKdataset import FiveK
 from datasets.Customdataset import CustomDataset
 from models.actor import Actor
+from PIL import Image
 from utils.eval import ImageEvaluator
 from utils.text_utils import load_vocab, txt2idx
 from torchvision.utils import save_image
@@ -18,7 +19,20 @@ from torchvision.utils import save_image
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+def concatenate_horizontally_pil(images, padding_size=0, padding_color=(255, 255, 255)):
+    widths, heights = zip(*(i.size for i in images))
 
+    total_width = sum(widths) + padding_size * (len(images) - 1)
+    max_height = max(heights)
+
+    new_img = Image.new("RGB", (total_width, max_height), color=padding_color)
+
+    x_offset = 0
+    for img in images:
+        new_img.paste(img, (x_offset, 0))
+        x_offset += img.width + padding_size
+    
+    return new_img
 
 def set_web(opt):
     web_dir = os.path.join(opt.run_dir, 'test', 'web')
@@ -73,9 +87,24 @@ def test(model, loader, opt, is_test=False):
 
         results_folder = f"results/{i:03d}"
         os.makedirs(results_folder, exist_ok=True)
-        save_image(torch.nn.functional.interpolate(img_x, (512, 512))[0], os.path.join(results_folder, "input.jpg"))
-        save_image(torch.nn.functional.interpolate(img_y, (512, 512))[0], os.path.join(results_folder, "target.jpg"))
-        save_image(torch.nn.functional.interpolate(pred_img, (512, 512))[0], os.path.join(results_folder, "pred.jpg"))
+        
+        img_x = img_x[0].cpu().numpy()*255
+        img_y = img_y[0].cpu().numpy()*255
+        pred_img = pred_img[0].cpu().numpy()*255
+        
+        img_x = Image.fromarray(img_x).resize((512, 512))
+        img_y = Image.fromarray(img_y).resize((512, 512))
+        pred_img = Image.fromarray(pred_img).resize((512, 512))
+        img_x.save(os.path.join(results_folder, "input.jpg"))
+        img_y.save(os.path.join(results_folder, "target.jpg"))
+        pred_img.save(os.path.join(results_folder, "pred.jpg"))
+        
+        concatenated_image = concatenate_horizontally_pil([img_x, pred_img], padding_size=10)
+        concatenated_image.save(os.path.join(results_folder, "concatenated_image.jpg"))
+        
+        # save_image(torch.nn.functional.interpolate(img_x, (512, 512))[0], os.path.join(results_folder, "input.jpg"))
+        # save_image(torch.nn.functional.interpolate(img_y, (512, 512))[0], os.path.join(results_folder, "target.jpg"))
+        # save_image(torch.nn.functional.interpolate(pred_img, (512, 512))[0], os.path.join(results_folder, "pred.jpg"))
         
         # tok = time.time()
         # avg_time = avg_time * (1 - 1/itr) + (tok - tik) / itr
