@@ -14,6 +14,7 @@ from models.actor import Actor
 from PIL import Image
 from utils.eval import ImageEvaluator
 from utils.text_utils import load_vocab, txt2idx
+import numpy as np
 from torchvision.utils import save_image
 
 
@@ -92,9 +93,9 @@ def test(model, loader, opt, is_test=False):
         img_y = img_y[0].permute(1, 2, 0).cpu().numpy()*255
         pred_img = pred_img[0].permute(1, 2, 0).cpu().numpy()*255
         
-        img_x = Image.fromarray(img_x).resize((512, 512))
-        img_y = Image.fromarray(img_y).resize((512, 512))
-        pred_img = Image.fromarray(pred_img).resize((512, 512))
+        img_x = Image.fromarray(img_x.astype(np.uint8)).resize((512, 512))
+        img_y = Image.fromarray(img_y.astype(np.uint8)).resize((512, 512))
+        pred_img = Image.fromarray(pred_img.astype(np.uint8)).resize((512, 512))
         img_x.save(os.path.join(results_folder, "input.jpg"))
         img_y.save(os.path.join(results_folder, "target.jpg"))
         pred_img.save(os.path.join(results_folder, "pred.jpg"))
