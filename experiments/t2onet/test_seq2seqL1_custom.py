@@ -88,9 +88,9 @@ def test(model, loader, opt, is_test=False):
         results_folder = f"results/{i:03d}"
         os.makedirs(results_folder, exist_ok=True)
         
-        img_x = img_x[0].cpu().numpy()*255
-        img_y = img_y[0].cpu().numpy()*255
-        pred_img = pred_img[0].cpu().numpy()*255
+        img_x = img_x[0].permute(1, 2, 0).cpu().numpy()*255
+        img_y = img_y[0].permute(1, 2, 0).cpu().numpy()*255
+        pred_img = pred_img[0].permute(1, 2, 0).cpu().numpy()*255
         
         img_x = Image.fromarray(img_x).resize((512, 512))
         img_y = Image.fromarray(img_y).resize((512, 512))
