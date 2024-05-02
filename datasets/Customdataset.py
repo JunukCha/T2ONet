@@ -45,8 +45,8 @@ class CustomDataset(Dataset):
     
 class CustomDatasetHQ(Dataset):
     def __init__(self):
-        self.source_list = glob.glob("../../code/demo_output/*/source.jpg")
-        self.text_list = glob.glob("../../code/demo_output/*/text.txt")
+        self.source_list = glob.glob("../../code/demo_output_HQ/*/source.jpg")
+        self.text_list = glob.glob("../../code/demo_output_HQ/*/text.txt")
         self.source_list.sort()
         self.text_list.sort()
 
