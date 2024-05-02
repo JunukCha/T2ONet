@@ -25,14 +25,6 @@ def load_vocab(vocab_dir, session):
 
 class CustomDataset(Dataset):
     def __init__(self):
-        # self.op_max_len = 6
-        # self.req_max_len = 15
-        # self.session = session
-        # self.phase = phase
-        # self.img_dir = img_dir
-        # self.data = self.load_data(anno_dir)
-        # self.train_img_size = train_img_size
-        # self.vocab2id, self.id2vocab, self.op_vocab2id, self.id2op_vocab = load_vocab(vocab_dir, self.session)
         self.source_list = glob.glob("../test/images/source/*.jpg")
         self.target_list = glob.glob("../test/images/target/*.jpg")
         # self.text_list = glob.glob("../test/text/*.txt")
@@ -40,10 +32,6 @@ class CustomDataset(Dataset):
         self.source_list.sort()
         self.target_list.sort()
         self.text_list.sort()
-    # def load_data(self, anno_dir):
-    #     with open(os.path.join(anno_dir, '{}_sess_{}.json'.format(self.phase, self.session))) as f:
-    #         data = json.load(f)
-    #     return data
 
     def __len__(self):
         return 100 # len(self.text_list)
@@ -51,15 +39,25 @@ class CustomDataset(Dataset):
     def __getitem__(self, i):
         with open(self.text_list[i], "r") as f:
             prompt = f.read().splitlines()[0]
-        image_0 = Image.open(self.source_list[i])
-        image_1 = Image.open(self.target_list[i])
-        image_0 = np.array(image_0.resize((600, 600)))
-        image_1 = np.array(image_1.resize((600, 600)))
-        image_0 = torch.FloatTensor(image_0)/255
-        image_1 = torch.FloatTensor(image_1)/255
-        image_0 = image_0.permute(2, 0, 1)
-        image_1 = image_1.permute(2, 0, 1)
+        image_0 = load_infer_img_short_size_bounded(self.source_list[i], 600)
+        image_1 = load_infer_img_short_size_bounded(self.target_list[i], 600)
         return image_0, image_1, prompt
+    
+class CustomDatasetHQ(Dataset):
+    def __init__(self):
+        self.source_list = glob.glob("../../code/demo_output/*/source.jpg")
+        self.text_list = glob.glob("../../code/demo_output/*/text.txt")
+        self.source_list.sort()
+        self.text_list.sort()
+
+    def __len__(self):
+        return 100 # len(self.text_list)
+
+    def __getitem__(self, i):
+        with open(self.text_list[i], "r") as f:
+            prompt = f.read().splitlines()[0]
+        image_0 = load_infer_img_short_size_bounded(self.source_list[i], 600)
+        return image_0, prompt
     
 
 def analyze_traj(seq):
