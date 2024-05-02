@@ -71,7 +71,7 @@ def test(model, loader, opt, is_test=False):
         tik = time.time()
         img_x, txt = data
         # ship to device
-        img_x = list(map(lambda r: r.to(device), [img_x]))
+        img_x = img_x.to(device)
         vocab2id, _, _, _ = load_vocab(opt.vocab_dir, opt.dataset, opt.session)
         x = txt2idx(txt[0], vocab2id, opt.encoder_max_len).to(device)
         with torch.no_grad():
